@@ -51,14 +51,14 @@ tasks = [
 # @app.route('/api/v1/tasks', methods=['GET'])
 
 
-# @app.route('/v1/add1w', methods=['GET'])
-# def get_add1w():
-#     db = client.testdb
-#     posts = db.col2
-#     for x in range(1000):
-#         new_post = {"UserName": random_str(), 'date': datetime.now()}
-#         posts.insert(new_post)
-#     return 'ok'
+@app.route('/v1/add1w', methods=['GET'])
+def get_add1w():
+    db = client.testdb
+    posts = db.col2
+    for x in range(1000):
+        new_post = {"UserName": random_str(), 'date': datetime.now()}
+        posts.insert(new_post)
+    return 'ok'
 
 # 授权连接
 @app.route('/v1/auth', methods=['POST', 'GET'])
