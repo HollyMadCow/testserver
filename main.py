@@ -32,6 +32,8 @@ def random_str(randomlength=16):
 """
 添加类
 """
+
+
 class User(object):
     username = ''
     passwordhash = ''
