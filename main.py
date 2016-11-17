@@ -3,17 +3,20 @@
 
 from flask import Flask, jsonify, request
 from pymongo import MongoClient
-from datetime import datetime
+from datetime import datetime, time
 import random
 import string
 from flask import Flask
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
+from itsdangerous import (TimedJSONWebSignatureSerializer
+                          as Serializer, BadSignature, SignatureExpired)
 
 
 app = Flask(__name__)
 client = MongoClient()
-
+app.config['SECRET_KEY'] = '$%NY5tNH%^%56mn^%&^bv%YBGF$%$%BTR$%$%^EB54^%$##$#Y$^V$#YGEg43$#GRG@##@V'
+app.config['AUTH_SALT'] = 'hjhnkFDGSGSGDehi'
 
 def random_str(randomlength=16):
     a = list(string.ascii_letters)
