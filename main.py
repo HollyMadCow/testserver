@@ -1,9 +1,10 @@
 #!/usr/bin/python
 #coding: utf-8
 
-from flask import Flask, jsonify, request
+from flask import Flask, abort, request, jsonify, g, url_for
 from pymongo import MongoClient
 from datetime import datetime, time
+from flask.ext.httpauth import HTTPBasicAuth
 import random
 import string
 from flask import Flask
@@ -16,7 +17,8 @@ from itsdangerous import (TimedJSONWebSignatureSerializer
 app = Flask(__name__)
 client = MongoClient()
 app.config['SECRET_KEY'] = '$%NY5tNH%^%56mn^%&^bv%YBGF$%$%BTR$%$%^EB54^%$##$#Y$^V$#YGEg43$#GRG@##@V'
-app.config['AUTH_SALT'] = 'hjhnkFDGSGSGDehi'
+app.config['AUTH_SALT'] = '@#F$T$H%H3t53$%Y45y$%Y65hgv$%'
+auth = HTTPBasicAuth()
 
 def random_str(randomlength=16):
     a = list(string.ascii_letters)
