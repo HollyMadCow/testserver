@@ -5,9 +5,9 @@ from flask import Flask, abort, request, jsonify, g, url_for
 from pymongo import MongoClient
 from datetime import datetime, time
 from flask.ext.httpauth import HTTPBasicAuth
+from passlib.apps import custom_app_context as pwd_context
 import random
 import string
-from flask import Flask
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
 from itsdangerous import (TimedJSONWebSignatureSerializer
@@ -20,10 +20,62 @@ app.config['SECRET_KEY'] = '$%NY5tNH%^%56mn^%&^bv%YBGF$%$%BTR$%$%^EB54^%$##$#Y$^
 app.config['AUTH_SALT'] = '@#F$T$H%H3t53$%Y45y$%Y65hgv$%'
 auth = HTTPBasicAuth()
 
+
+"""
+随机字符串
+"""
 def random_str(randomlength=16):
     a = list(string.ascii_letters)
     random.shuffle(a)
     return ''.join(a[:randomlength])
+
+
+class User(object):
+    username = ''
+    passwordhash = ''
+    def __init__(self, username,passwordhash):
+        self.username = username
+        self.password_hash = passwordhash
+    # __tablename__ = 'users'
+    # id = db.Column(db.Integer, primary_key=True)
+    # username = db.Column(db.String(32), index=True)
+    # password_hash = db.Column(db.String(64))
+
+    def hash_password(self, password):
+        self.password_hash = pwd_context.encrypt(password)
+
+    def verify_password(self, password):
+        return pwd_context.verify(password, self.password_hash)
+
+    def generate_auth_token(self, expiration=600):
+        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': self.id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None    # valid token, but expired
+        except BadSignature:
+            return None    # invalid token
+        user = User.query.get(data['id'])
+        return user
+
+
+@auth.verify_password
+def verify_password(username_or_token, password):
+    # first try to authenticate by token
+    user = User.verify_auth_token(username_or_token)
+    if not user:
+        # try to authenticate with username/password
+        user = User.query.filter_by(username=username_or_token).first()
+        if not user or not user.verify_password(password):
+            return False
+    g.user = user
+    return True
+
 
 
 tasks = [
