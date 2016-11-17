@@ -29,7 +29,9 @@ def random_str(randomlength=16):
     random.shuffle(a)
     return ''.join(a[:randomlength])
 
-
+"""
+添加类
+"""
 class User(object):
     username = ''
     passwordhash = ''
