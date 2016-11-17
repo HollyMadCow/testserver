@@ -24,6 +24,8 @@ auth = HTTPBasicAuth()
 """
 随机字符串
 """
+
+
 def random_str(randomlength=16):
     a = list(string.ascii_letters)
     random.shuffle(a)
@@ -37,6 +39,7 @@ def random_str(randomlength=16):
 class User(object):
     username = ''
     passwordhash = ''
+
     def __init__(self, username,passwordhash):
         self.username = username
         self.password_hash = passwordhash
