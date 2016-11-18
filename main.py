@@ -36,13 +36,14 @@ def random_str(randomlength=16):
 """
 
 
-class User(object):
+class User(client):
     username = ''
     passwordhash = ''
 
     def __init__(self, username,passwordhash):
         self.username = username
         self.password_hash = passwordhash
+        db=client.maindb
     # __tablename__ = 'users'
     # id = db.Column(db.Integer, primary_key=True)
     # username = db.Column(db.String(32), index=True)
@@ -82,7 +83,6 @@ def verify_password(username_or_token, password):
             return False
     g.user = user
     return True
-
 
 
 tasks = [
@@ -151,9 +151,22 @@ def update_userinfo():
 
 # 用户注册
 @app.route('/v1/register', methods=['POST'])
-def reg_user():
-    test = request.headers['token']
-    return jsonify(test)
+# def reg_user():
+#     test = request.headers['token']
+#     return jsonify(test)
+def new_user():
+    # username = request.json.get('username')
+    # password = request.json.get('password')
+    username = request.form.get('username')
+    passwordhash = request.form.get('passwordhash')
+    if username is None or passwordhash is None:
+        abort(400)    # missing arguments
+    if User.query.filter_by(username=username).first() is not None:
+        abort(400)    # existing user
+    user = User(username=username)
+    user.salt_password(passwordhash)
+    return (jsonify({'username': user.username}), 201,
+            {'Location': url_for('get_user', userid=user.id, _external=True)})
 
 
 # 忘记密码
@@ -163,7 +176,7 @@ def forget_user():
 
 
 # 客户端获取用户信息
-@app.route('/v1/user/<userid>', methods=['GET'])
+@app.route('/v1/user/<int:userid>', methods=['GET'])
 def get_userinfo(userid):
 
     return userid
