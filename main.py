@@ -36,10 +36,10 @@ def random_str(randomlength=16):
 """
 
 
-class User(client):
+class User:
     username = ''
     passwordhash = ''
-
+    userid = ''
     def __init__(self, username,passwordhash):
         self.username = username
         self.password_hash = passwordhash
