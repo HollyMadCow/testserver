@@ -40,10 +40,12 @@ class User:
     username = ''
     passwordhash = ''
     userid = ''
+    db = client.maindb
+
     def __init__(self, username,passwordhash):
         self.username = username
         self.password_hash = passwordhash
-        db=client.maindb
+
     # __tablename__ = 'users'
     # id = db.Column(db.Integer, primary_key=True)
     # username = db.Column(db.String(32), index=True)
