@@ -39,8 +39,6 @@ def random_str(randomlength=16):
 class User:
     # username = ''
     # passwordhash = ''
-    id = ''
-    # db = ''
     hash_thepasswordhash = ''
 
     def __init__(self, username, passwordhash):
@@ -168,9 +166,9 @@ def new_user():
     if User.query.filter_by(username=username).first() is not None:
         abort(400)    # existing user
     user = User(username=username)
-    user.salt_password(passwordhash)
+    user.hash_passwordhash(passwordhash)
     return (jsonify({'username': user.username}), 201,
-            {'Location': url_for('get_user', userid=user.id, _external=True)})
+            {'Location': url_for('get_userinfo', username=user.username, _external=True)})
 
 
 # 忘记密码
@@ -180,10 +178,10 @@ def forget_user():
 
 
 # 客户端获取用户信息
-@app.route('/v1/user/<int:userid>', methods=['GET'])
-def get_userinfo(userid):
+@app.route('/v1/user/<username>', methods=['GET'])
+def get_userinfo(username):
 
-    return userid
+    return username
 
 
 #列表
