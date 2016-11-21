@@ -15,6 +15,7 @@ from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
+from resources.user import Foo, Foo1
 
 
 app = Flask(__name__)
@@ -266,7 +267,7 @@ def get_tasks1():
     # return jsonify({'tasks': tasks})
 
 
-# api.add_resource(TodoList, '/todos')
+api.add_resource(Foo, '/Foo', '/Foo/<username>')
 
 
 if __name__ == '__main__':
