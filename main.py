@@ -1,10 +1,13 @@
 #!/usr/bin/python
 #coding: utf-8
 
+
 from flask import Flask, abort, request, jsonify, g, url_for
+from flask_restful import Api, Resource, reqparse, fields, marshal
+from flask_httpauth import HTTPBasicAuth
 from pymongo import MongoClient
 from datetime import datetime, time
-from flask.ext.httpauth import HTTPBasicAuth
+# from flask.ext.httpauth import HTTPBasicAuth
 from passlib.apps import custom_app_context as pwd_context
 import random
 import string
@@ -15,6 +18,7 @@ from itsdangerous import (TimedJSONWebSignatureSerializer
 
 
 app = Flask(__name__)
+api = Api(app)
 client = MongoClient()
 app.config['SECRET_KEY'] = '$%NY5tNH%^%56mn^%&^bv%YBGF$%$%BTR$%$%^EB54^%$##$#Y$^V$#YGEg43$#GRG@##@V'
 app.config['AUTH_SALT'] = '@#F$T$H%H3t53$%Y45h45%$j665j56j*&#f3vy$%Y65hgv$%'
@@ -103,6 +107,9 @@ tasks = [
 ]
 
 
+# class TodoList(Resource):
+#     def get(self):
+#         return tasks
 # @app.route('/v1/add', methods=['GET'])
 # def get_tasks0():
 #
@@ -115,6 +122,10 @@ tasks = [
 #         return jsonify({'tasks': tasks})
 
 # @app.route('/api/v1/tasks', methods=['GET'])
+@app.route('/api/v1/test11', methods=['GET'])
+def testmy():
+    return {'tash': 'hello'}
+    # return {'task': 'hello'}
 
 
 # @app.route('/v1/add1w', methods=['GET'])
@@ -159,6 +170,7 @@ def update_userinfo():
 def new_user():
     # username = request.json.get('username')
     # password = request.json.get('password')
+
     username = request.form.get('username')
     passwordhash = request.form.get('passwordhash')
     if username is None or passwordhash is None:
@@ -252,6 +264,10 @@ def get_tasks1():
 
     return pa + pa1
     # return jsonify({'tasks': tasks})
+
+
+# api.add_resource(TodoList, '/todos')
+
 
 if __name__ == '__main__':
     app.run()
