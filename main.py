@@ -196,7 +196,7 @@ def get_userinfo(username):
     return username
 
 
-#列表
+# 列表
 @app.route('/v1/itemlist', methods=['GET'])
 def get_itemlist():
 
@@ -216,14 +216,14 @@ def add_item():
     pass
 
 
-#添加购物车
+# 添加购物车
 @app.route('/v1/addcart/', methods=['POST'])
 def add_cart():
 
     pass
 
 
-#下单
+# 下单
 @app.route('/v1/placedorder/', methods=['POST'])
 def place_order():
 
